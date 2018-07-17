@@ -1,4 +1,7 @@
+// https://yts.am/api/v2/list_movies.json?query_term=iron%20man&sort_by=year
+var page=1;
 $('#get-movie-info').click(function(){
+  console.log($('#movie-name').val());
   $.ajax({
     type:'get',
     url: 'http://www.omdbapi.com',
@@ -7,32 +10,93 @@ $('#get-movie-info').click(function(){
       apikey: "79571dc4"
     },
     success: function(responseData) {
+      console.log(responseData);
       $('#search-result').empty();
       $(responseData.Search).each(function(index,movie){
-         $('#search-result').append(
-         `<div class="search-result-movie">
-            <div class="poster"></br><img src="${movie.Poster}"/></div>
-            <div class="title"><br>${movie.Title}</div>
-            <button class="know-more">Know More</button>
-          </div>`
+        $('#search-result').append(
+        `<div class="search-result-movie">
+          <div class="poster"></br><img src="${movie.Poster}"/></div>
+          <div class="title"><br>${movie.Title} - ${movie.Year} </div>
+          <a onclick="movieSelected('${movie.imdbID}')" href="#" class="know-more">Know More</a>
+        </div>`
         );
       });
     },
     error: function(err){
       console.log(err);
     }
-  })
-})
+  });
+});
 
-//   '<br><b>Year</b>: '+responseData.Year+
-//   '<br><b>Language</b>: '+responseData.Language+
-//   '<br><b>Runtime</b>: '+responseData.Runtime+
-//   '<br><b>Actors</b>: '+responseData.Actors+
-//   '<br><b>Director</b>: '+responseData.Director+
-//   '<br><b>Writer</b>: '+responseData.Writer+
-//
-//   '<br><b>Country</b>: '+responseData.Country+
-//   '<br><b>imdbRating</b>: '+responseData.imdbRating+
-//   '<br><b>Production</b>: '+responseData.Production+
-//   '<br><b>BoxOffice:</b> '+responseData.BoxOffice+
-//   '<br><b>Plot:</b> '+responseData.Plot
+function movieSelected(id){
+  sessionStorage.setItem('movieID',id)
+  window.location='movie.html';
+  // return false;
+}
+
+function movieDetails(){
+  let imdbID=sessionStorage.getItem('movieID');
+  $.ajax({
+    type:'get',
+    url: 'http://www.omdbapi.com',
+    data: {
+      i: imdbID,
+      apikey: "79571dc4"
+    },
+    success: function(responseData) {
+      console.log(responseData.Title);
+      $('#selected-movie-details').append(
+        `<div class="poster"></br><img     src="${responseData.Poster}"/></div>
+        <div class="selected-movie-details">
+        <table>
+          <tr>
+            <th>Title</th>
+            <td>${responseData.Title}</th>
+          </tr>
+          <tr>
+            <th>Year</th>
+            <td>${responseData.Year}</td>
+          </tr>
+          <tr>
+            <th>Runtime</th>
+            <td>${responseData.Runtime}</td>
+          </tr>
+          <tr>
+            <th>Actors</th>
+            <td>${responseData.Actors}</td>
+          </tr>
+          <tr>
+            <th>Director</th>
+            <td>${responseData.Director}</td>
+          </tr>
+          <tr>
+            <th>Writer</th>
+            <td>${responseData.Writer}</td>
+          </tr>
+          <tr>
+            <th>Country</th>
+            <td>${responseData.Country}</td>
+          </tr>
+          <tr>
+            <th>imdbRating</th>
+            <td>${responseData.imdbRating}</td>
+          </tr>
+          <tr>
+            <th>Production</th>
+            <td>${responseData.Production}</td>
+          </tr>
+          <tr>
+            <th>BoxOffice</th>
+            <td>${responseData.BoxOffice}</td>
+          </tr>
+        </table>
+
+        <br><b>Plot:</b> ${responseData.Plot}
+      </div>
+      `);
+    },
+    error: function(err){
+      console.log(err);
+    }
+  });
+}
