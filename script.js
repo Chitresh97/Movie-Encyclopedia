@@ -17,7 +17,7 @@ $('#get-movie-info').click(function(){
         `<div class="search-result-movie">
           <img src="${movie.Poster}" class="poster"/>
           <div class="middle">
-            ${movie.Title} <br> ${movie.Year}<br>
+            <strong>${movie.Title}</strong> <br> <span class="movie-year">${movie.Year}</span><br>
             <a onclick="movieSelected('${movie.imdbID}')" href="#" class="know-more">Know More</a>
           </div>
         </div>`
