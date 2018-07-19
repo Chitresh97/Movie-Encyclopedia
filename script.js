@@ -1,4 +1,4 @@
-// https://yts.am/api/v2/list_movies.json?query_term=iron%20man&sort_by=year
+ // https://yts.am/api/v2/list_movies.json?query_term=iron%20man&sort_by=year
 var page=1;
 $('#get-movie-info').click(function(){
   console.log($('#movie-name').val());
@@ -15,9 +15,11 @@ $('#get-movie-info').click(function(){
       $(responseData.Search).each(function(index,movie){
         $('#search-result').append(
         `<div class="search-result-movie">
-          <div class="poster"></br><img src="${movie.Poster}"/></div>
-          <div class="title"><br>${movie.Title} - ${movie.Year} </div>
-          <a onclick="movieSelected('${movie.imdbID}')" href="#" class="know-more">Know More</a>
+          <img src="${movie.Poster}" class="poster"/>
+          <div class="middle">
+            ${movie.Title} <br> ${movie.Year}<br>
+            <a onclick="movieSelected('${movie.imdbID}')" href="#" class="know-more">Know More</a>
+          </div>
         </div>`
         );
       });
@@ -46,7 +48,7 @@ function movieDetails(){
     success: function(responseData) {
       console.log(responseData.Title);
       $('#selected-movie-details').append(
-        `<div class="poster"></br><img     src="${responseData.Poster}"/></div>
+        `<div class="inside-poster"></br><img     src="${responseData.Poster}"/></div>
         <div class="selected-movie-details">
         <table>
           <tr>
